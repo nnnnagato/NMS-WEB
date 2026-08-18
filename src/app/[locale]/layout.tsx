@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
@@ -63,25 +64,33 @@ export function generateStaticParams() {
 
 export default async function LocaleLayout({
   children,
-  params
+  params,
 }: {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const messages = await getMessages();
+
+  // Validación de seguridad para rutas soportadas
+  if (!routing.locales.includes(locale as any)) {
+    notFound();
+  }
+
+  const messages = await getMessages({ locale });
 
   return (
     <html lang={locale}>
-      <head>
-        <link rel="icon" href="/Logo-NMS.png" type="image/png" />
-      </head>
-      <body className="min-h-screen flex flex-col justify-between antialiased bg-slate-50 text-slate-900">
+      <body className="min-h-screen flex flex-col justify-between antialiased bg-slate-50 text-slate-900 selection:bg-slate-800 selection:text-white">
         <NextIntlClientProvider messages={messages}>
+          {/* Header fijo h-28 */}
           <Navbar locale={locale} />
-          <div className="flex-grow">
+          
+          {/* pt-28 compensa con exactitud los 112px del header */}
+          <main className="flex-grow pt-28 flex flex-col">
             {children}
-          </div>
+          </main>
+          
+          {/* Footer Corporativo */}
           <Footer locale={locale} />
         </NextIntlClientProvider>
       </body>

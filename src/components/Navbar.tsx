@@ -1,167 +1,176 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 
-export default function Navbar({ locale }: { locale: string }) {
-  const t = useTranslations('Navbar');
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+interface NavbarProps {
+  locale: string;
+}
+
+export default function Navbar({ locale }: NavbarProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isEs = locale === 'es';
 
-  const switchLocale = (newLocale: string) => {
-    if (newLocale === locale) return;
+  const headerRef = useRef<HTMLElement>(null);
+  const logoContainerRef = useRef<HTMLDivElement>(null);
+  const navCenterRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      // Timeline vinculado al scroll continuo mediante scrub
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: document.body,
+          start: 'top top',
+          end: '+=100', // Transición suave completada en los primeros 100px
+          scrub: 0.5,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // 1. Reducir la altura del Header
+      tl.to(
+        headerRef.current,
+        {
+          height: 64,
+          backgroundColor: 'rgba(255, 255, 255, 0.98)',
+          boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.08)',
+          borderBottomColor: 'rgba(226, 232, 240, 0.9)',
+          ease: 'none',
+        },
+        0
+      )
+      // 2. Reducir el isotipo proporcionalmente manteniéndolo anclado a la base
+      .to(
+        logoContainerRef.current,
+        {
+          scale: 0.58,
+          transformOrigin: 'center center',
+          ease: 'none',
+        },
+        0
+      )
+      // 3. Ajustar levemente el grupo central para encajar en la altura compacta
+      .to(
+        navCenterRef.current,
+        {
+          scale: 0.95,
+          ease: 'none',
+        },
+        0
+      );
+    },
+    { scope: headerRef }
+  );
+
+  const getLanguagePath = (targetLocale: string) => {
+    if (!pathname) return `/${targetLocale}`;
     const segments = pathname.split('/');
-    segments[1] = newLocale;
-    const newPath = segments.join('/') || `/${newLocale}`;
-    router.push(newPath);
+    segments[1] = targetLocale;
+    return segments.join('/') || `/${targetLocale}`;
   };
 
-  const navLinks = [
-    { name: t('home'), href: `/${locale}` },
-    { name: t('catalog'), href: `/${locale}/catalog` },
-    { name: t('contact'), href: `/${locale}/contact` },
-  ];
-
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm transition-all">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-20 items-center justify-between">
-          
-          {/* Logo Corporativo */}
-          <Link href={`/${locale}`} className="flex items-center space-x-3 group">
-            <div className="relative h-12 w-12 flex-shrink-0 transition-transform group-hover:scale-105">
-              <Image
-                src="/Logo-NMS.png"
-                alt="North Maritime Services Logo"
-                fill
-                priority
-                sizes="48px"
-                className="object-contain"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-extrabold text-slate-900 tracking-tight text-base sm:text-lg leading-none">
-                NORTH MARITIME SERVICES
-              </span>
-              <span className="text-[10px] font-bold text-blue-600 tracking-widest uppercase mt-1">
-                {locale === 'es' ? 'Antofagasta y Mejillones' : 'Antofagasta & Mejillones'}
-              </span>
-            </div>
+    <header
+      ref={headerRef}
+      className="fixed top-0 left-0 right-0 z-50 h-28 bg-white border-b border-slate-200 transition-colors will-change-transform"
+    >
+      <div className="relative w-full h-full px-6 sm:px-12 flex items-center justify-between">
+        
+        {/* 1. ISOTIPO ANCLADO EN LA LÍNEA DE CORTE (TOP-FULL -TRANSLATE-Y-1/2) */}
+        <div
+          ref={logoContainerRef}
+          className="absolute left-6 sm:left-12 top-full -translate-y-1/2 z-50 will-change-transform pointer-events-auto"
+        >
+          <Link
+            href={`/${locale}`}
+            className="block relative w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 drop-shadow-xl hover:scale-105 transition-transform duration-200"
+          >
+            <Image
+              src="/Isotipo-NMS.png"
+              alt="North Maritime Services Isotipo"
+              fill
+              className="object-contain"
+              priority
+            />
           </Link>
-
-          {/* Navegación Desktop */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`text-sm font-semibold transition-colors ${
-                    isActive 
-                      ? 'text-blue-600 font-bold' 
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Selector de Idiomas */}
-          <div className="hidden md:flex items-center">
-            <div className="flex items-center rounded-xl bg-slate-100 p-1 border border-slate-200">
-              <button
-                type="button"
-                onClick={() => switchLocale('es')}
-                className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                  locale === 'es'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                ES
-              </button>
-              <button
-                type="button"
-                onClick={() => switchLocale('en')}
-                className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                  locale === 'en'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                EN
-              </button>
-            </div>
-          </div>
-
-          {/* Botón Menú Mobile */}
-          <div className="flex items-center gap-2 md:hidden">
-            <div className="flex items-center rounded-xl bg-slate-100 p-1 border border-slate-200">
-              <button
-                type="button"
-                onClick={() => switchLocale('es')}
-                className={`px-2 py-1 text-xs font-bold rounded-lg ${
-                  locale === 'es' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500'
-                }`}
-              >
-                ES
-              </button>
-              <button
-                type="button"
-                onClick={() => switchLocale('en')}
-                className={`px-2 py-1 text-xs font-bold rounded-lg ${
-                  locale === 'en' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500'
-                }`}
-              >
-                EN
-              </button>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="rounded-xl p-2.5 text-slate-700 hover:bg-slate-100"
-              aria-label="Abrir Menú"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {mobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-          </div>
-
         </div>
-      </div>
 
-      {/* Menú Desplegable Mobile */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-2">
-          {navLinks.map((link) => (
+        {/* 2. MENÚ + CAMBIO DE IDIOMA CENTRADOS MATEMÁTICAMENTE */}
+        <div
+          ref={navCenterRef}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-8 sm:gap-10"
+        >
+          <nav className="flex items-center gap-6 sm:gap-8">
             <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className={`block rounded-xl px-4 py-2.5 text-base font-semibold transition-colors ${
-                pathname === link.href
-                  ? 'bg-blue-50 text-blue-600 font-bold'
-                  : 'text-slate-700 hover:bg-slate-50'
+              href={`/${locale}`}
+              className={`font-bold text-sm sm:text-base transition-all duration-200 relative py-1.5 ${
+                pathname === `/${locale}`
+                  ? 'text-blue-700 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-blue-700'
+                  : 'text-slate-700 hover:text-blue-700'
               }`}
             >
-              {link.name}
+              {isEs ? 'Inicio' : 'Home'}
             </Link>
-          ))}
+
+            <Link
+              href={`/${locale}/catalog`}
+              className={`font-bold text-sm sm:text-base transition-all duration-200 relative py-1.5 ${
+                pathname.includes('/catalog')
+                  ? 'text-blue-700 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-blue-700'
+                  : 'text-slate-700 hover:text-blue-700'
+              }`}
+            >
+              {isEs ? 'Catálogo & Cotización' : 'Catalog & Quotation'}
+            </Link>
+
+            <Link
+              href={`/${locale}/contact`}
+              className={`font-bold text-sm sm:text-base transition-all duration-200 relative py-1.5 ${
+                pathname.includes('/contact')
+                  ? 'text-blue-700 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-blue-700'
+                  : 'text-slate-700 hover:text-blue-700'
+              }`}
+            >
+              {isEs ? 'Contacto' : 'Contact'}
+            </Link>
+          </nav>
+
+          {/* Selector de Idioma */}
+          <div className="inline-flex items-center rounded-xl bg-slate-100 p-1 border border-slate-200 shadow-inner">
+            <Link
+              href={getLanguagePath('es')}
+              className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
+                isEs
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              ES
+            </Link>
+            <Link
+              href={getLanguagePath('en')}
+              className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
+                !isEs
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              EN
+            </Link>
+          </div>
         </div>
-      )}
+
+      </div>
     </header>
   );
 }
