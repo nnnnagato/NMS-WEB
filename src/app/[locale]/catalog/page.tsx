@@ -21,7 +21,7 @@ const fallbackProducts: Product[] = [
     name_en: 'Beef Meat (Loin / Cut)',
     category: 'Provisión Fresca & Congelada',
     unit: 'Kg',
-    price: 12.5,
+    price: 12500,
     stock_status: 'In Stock',
     image_url: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=600&q=80'
   },
@@ -31,7 +31,7 @@ const fallbackProducts: Product[] = [
     name_en: 'Chicken Breast',
     category: 'Provisión Fresca & Congelada',
     unit: 'Kg',
-    price: 6.8,
+    price: 6800,
     stock_status: 'In Stock',
     image_url: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=600&q=80'
   },
@@ -41,7 +41,7 @@ const fallbackProducts: Product[] = [
     name_en: 'Fresh / Frozen Fish (Salmon/Reineta)',
     category: 'Provisión Fresca & Congelada',
     unit: 'Kg',
-    price: 14.0,
+    price: 14000,
     stock_status: 'In Stock',
     image_url: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=600&q=80'
   },
@@ -51,7 +51,7 @@ const fallbackProducts: Product[] = [
     name_en: 'Long Grain Rice (25kg Bag)',
     category: 'Víveres Secos & Rancho',
     unit: 'Saco / Bag',
-    price: 28.0,
+    price: 28000,
     stock_status: 'In Stock',
     image_url: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80'
   },
@@ -61,7 +61,7 @@ const fallbackProducts: Product[] = [
     name_en: 'Vegetable Oil (Box 12x1L)',
     category: 'Víveres Secos & Rancho',
     unit: 'Caja / Box',
-    price: 32.0,
+    price: 32000,
     stock_status: 'In Stock',
     image_url: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=600&q=80'
   },
@@ -71,7 +71,7 @@ const fallbackProducts: Product[] = [
     name_en: 'Still Mineral Water (Pack 6x1.5L)',
     category: 'Bebidas & Consumo',
     unit: 'Pack',
-    price: 7.5,
+    price: 7125,
     stock_status: 'In Stock',
     image_url: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=600&q=80'
   },
@@ -81,7 +81,7 @@ const fallbackProducts: Product[] = [
     name_en: 'Seasonal Fresh Fruits (Apples, Oranges, Bananas)',
     category: 'Frutas & Verduras Frescas',
     unit: 'Kg',
-    price: 3.2,
+    price: 3040,
     stock_status: 'In Stock',
     image_url: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=600&q=80'
   },
@@ -91,7 +91,7 @@ const fallbackProducts: Product[] = [
     name_en: 'Assorted Fresh Vegetables (Potatoes, Onions, Tomatoes)',
     category: 'Frutas & Verduras Frescas',
     unit: 'Kg',
-    price: 2.8,
+    price: 2800,
     stock_status: 'In Stock',
     image_url: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80'
   }

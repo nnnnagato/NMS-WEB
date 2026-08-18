@@ -22,39 +22,30 @@ export interface Product {
 const getAccurateProductImage = (product: Product): string => {
   const name = (product.name_es + ' ' + product.name_en).toLowerCase();
 
-  // Imagen de Botellas de Agua Mineral / Bebidas
   if (name.includes('agua') || name.includes('water') || name.includes('mineral') || name.includes('beverage')) {
     return 'https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=600&q=80';
   }
-  // Productos Lácteos y Leche
   if (name.includes('lácteo') || name.includes('leche') || name.includes('dairy') || name.includes('milk')) {
     return 'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=600&q=80';
   }
-  // Carnes y Cortes Vacuno
   if (name.includes('carne') || name.includes('vacuno') || name.includes('beef') || name.includes('meat') || name.includes('lomo')) {
     return 'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=600&q=80';
   }
-  // Pollo y Aves
   if (name.includes('pollo') || name.includes('chicken') || name.includes('pechuga')) {
     return 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=600&q=80';
   }
-  // Pescados y Mariscos
   if (name.includes('pescado') || name.includes('fish') || name.includes('salmón') || name.includes('salmon')) {
     return 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80';
   }
-  // Frutas Frescas
   if (name.includes('fruta') || name.includes('fruit') || name.includes('manzana')) {
     return 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=600&q=80';
   }
-  // Verduras y Hortalizas
   if (name.includes('verdura') || name.includes('vegetable') || name.includes('papa') || name.includes('tomate')) {
     return 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80';
   }
-  // Arroz y Granos
   if (name.includes('arroz') || name.includes('rice') || name.includes('grano')) {
     return 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80';
   }
-  // Aceites y Grasas
   if (name.includes('aceite') || name.includes('oil')) {
     return 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=600&q=80';
   }
@@ -62,7 +53,6 @@ const getAccurateProductImage = (product: Product): string => {
   return 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80';
 };
 
-// Traducciones y unificación de categorías
 const CATEGORY_TRANSLATIONS: Record<string, { es: string; en: string }> = {
   'beverages & consumption': { es: 'Bebidas & Consumo', en: 'Beverages & Consumption' },
   'bebidas & consumo': { es: 'Bebidas & Consumo', en: 'Beverages & Consumption' },
@@ -99,7 +89,6 @@ export default function CatalogClient({ products, locale }: { products: Product[
 
   const USD_TO_CLP = 950;
 
-  // Normalizador de categoría
   const getCategoryLabel = (rawCategory: string) => {
     const key = rawCategory.toLowerCase().trim();
     if (CATEGORY_TRANSLATIONS[key]) {
@@ -108,7 +97,6 @@ export default function CatalogClient({ products, locale }: { products: Product[
     return rawCategory;
   };
 
-  // Normalizador de unidades (elimina las barras combinadas de idiomas)
   const formatUnit = (unitStr: string) => {
     const lower = unitStr.toLowerCase().trim();
     if (lower.includes('caja') || lower.includes('box')) return locale === 'es' ? 'Caja' : 'Box';
@@ -120,7 +108,6 @@ export default function CatalogClient({ products, locale }: { products: Product[
     return unitStr;
   };
 
-  // Normalizador de stock
   const formatStock = (stockStr: string) => {
     const lower = (stockStr || '').toLowerCase();
     if (lower.includes('stock') || lower.includes('avail') || lower.includes('disp')) {
@@ -297,35 +284,35 @@ export default function CatalogClient({ products, locale }: { products: Product[
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 pb-32">
+    <main className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8 pb-32">
       <div className="mx-auto max-w-7xl">
         
         {/* Encabezado */}
-        <div className="text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        <div className="text-center max-w-3xl mx-auto">
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
             {t('title')}
           </h1>
-          <p className="mt-3 text-lg text-slate-600">
+          <p className="mt-2.5 text-base sm:text-lg text-slate-600 font-normal leading-relaxed">
             {t('subtitle')}
           </p>
         </div>
 
         {/* Buscador Centrado */}
-        <div className="mt-10 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <div ref={categoryMenuRef} className="relative w-full max-w-2xl">
-            <div className="flex items-center rounded-2xl bg-white border border-slate-300 shadow-sm p-1.5 focus-within:ring-2 focus-within:ring-blue-600 focus-within:border-blue-600 transition-all">
+            <div className="flex items-center rounded-2xl bg-white border border-slate-300 shadow-sm p-1.5 focus-within:ring-2 focus-within:ring-[#E45B25] focus-within:border-[#E45B25] transition-all">
               
               {/* Botón Categorías */}
               <button
                 type="button"
                 onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
-                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   isCategoryMenuOpen || selectedCategoryKey !== 'ALL'
                     ? 'bg-slate-900 text-white shadow-sm'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
                 <span className="hidden sm:inline">
@@ -352,7 +339,7 @@ export default function CatalogClient({ products, locale }: { products: Product[
                 {searchQuery ? (
                   <button 
                     onClick={() => setSearchQuery('')}
-                    className="text-slate-400 hover:text-slate-600 text-sm font-bold p-1"
+                    className="text-slate-400 hover:text-slate-600 text-sm font-bold p-1 cursor-pointer"
                   >
                     &times;
                   </button>
@@ -378,15 +365,15 @@ export default function CatalogClient({ products, locale }: { products: Product[
                         setSelectedCategoryKey(catLabel);
                         setIsCategoryMenuOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition-all flex items-center justify-between ${
+                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition-all flex items-center justify-between cursor-pointer ${
                         selectedCategoryKey === catLabel
-                          ? 'bg-blue-50 text-blue-700 font-bold'
+                          ? 'bg-orange-50 text-[#E45B25] font-bold'
                           : 'text-slate-700 hover:bg-slate-50'
                       }`}
                     >
                       <span>{catLabel === 'ALL' ? t('allCategories') : catLabel}</span>
                       {selectedCategoryKey === catLabel && (
-                        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-[#E45B25]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                         </svg>
                       )}
@@ -405,7 +392,7 @@ export default function CatalogClient({ products, locale }: { products: Product[
             <p className="mt-2 text-sm">{t('successDesc')}</p>
             <button 
               onClick={() => setSuccess(false)}
-              className="mt-4 rounded-xl bg-emerald-600 px-6 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-700"
+              className="mt-4 rounded-xl bg-emerald-600 px-6 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-700 cursor-pointer"
             >
               {t('newQuote')}
             </button>
@@ -433,7 +420,7 @@ export default function CatalogClient({ products, locale }: { products: Product[
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                     className="object-cover"
                   />
-                  <span className="absolute top-3 left-3 rounded-md bg-slate-900/85 backdrop-blur px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+                  <span className="absolute top-3 left-3 rounded-md bg-slate-900/85 backdrop-blur px-2.5 py-1 text-[10px] font-bold text-white uppercase tracking-wider shadow-sm">
                     {categoryLabel}
                   </span>
                 </div>
@@ -441,7 +428,7 @@ export default function CatalogClient({ products, locale }: { products: Product[
                 {/* Info */}
                 <div className="p-5 flex flex-col justify-between flex-grow">
                   <div>
-                    <h3 className="text-base font-bold text-slate-900 line-clamp-2">
+                    <h3 className="text-sm sm:text-base font-bold text-slate-900 line-clamp-2 leading-snug">
                       {locale === 'es' ? product.name_es : product.name_en}
                     </h3>
                   </div>
@@ -449,39 +436,39 @@ export default function CatalogClient({ products, locale }: { products: Product[
                   <div className="mt-4 pt-3 border-t border-slate-100">
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="text-xs text-slate-500">
+                        <span className="text-[11px] text-slate-400 font-mono block">
                           {locale === 'es' ? 'Precio / ' : 'Price / '}{formatUnit(product.unit)}
                         </span>
                         <div className="flex items-baseline gap-1 mt-0.5">
-                          <span className="text-lg font-extrabold text-slate-900">
+                          <span className="text-base sm:text-lg font-black text-slate-900 font-mono">
                             {formatPriceNumber(product.price)}
                           </span>
-                          <span className="text-xs font-bold text-blue-600">
+                          <span className="text-[10px] font-bold text-[#E45B25] font-mono">
                             {locale === 'es' ? 'CLP' : 'USD'}
                           </span>
                         </div>
                       </div>
-                      <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+                      <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 border border-emerald-100">
                         {formatStock(product.stock_status)}
                       </span>
                     </div>
 
                     {/* Botones de Cantidad */}
                     <div className="mt-4 flex items-center justify-between rounded-xl bg-slate-50 p-1.5 border border-slate-200">
-                      <span className="text-xs font-medium text-slate-600 pl-2">
+                      <span className="text-xs font-medium text-slate-600 pl-2 font-mono">
                         {t('quantityLabel')}
                       </span>
                       <div className="flex items-center space-x-2">
                         <button 
                           onClick={() => handleQuantityChange(product.id, -1)}
-                          className="h-7 w-7 rounded-lg bg-white border border-slate-300 font-bold text-slate-700 shadow-sm hover:bg-slate-100"
+                          className="h-7 w-7 rounded-lg bg-white border border-slate-300 font-bold text-slate-700 shadow-sm hover:bg-slate-100 cursor-pointer"
                         >
                           -
                         </button>
-                        <span className="w-6 text-center font-bold text-slate-900 text-sm">{qty}</span>
+                        <span className="w-6 text-center font-bold text-slate-900 text-sm font-mono">{qty}</span>
                         <button 
                           onClick={() => handleQuantityChange(product.id, 1)}
-                          className="h-7 w-7 rounded-lg bg-white border border-slate-300 font-bold text-slate-700 shadow-sm hover:bg-slate-100"
+                          className="h-7 w-7 rounded-lg bg-white border border-slate-300 font-bold text-slate-700 shadow-sm hover:bg-slate-100 cursor-pointer"
                         >
                           +
                         </button>
@@ -501,56 +488,77 @@ export default function CatalogClient({ products, locale }: { products: Product[
           </div>
         )}
 
-        {/* Barra Flotante Inferior */}
+        {/* BARRA FLOTANTE DE RESUMEN Y COTIZACIÓN (GRIS PERLA ELEGANTE CON CONTRASTE DEFINIDO) */}
         {totalItemsCount > 0 && !success && (
-          <div className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900 text-white shadow-2xl py-4 px-6 border-t border-slate-800">
+          <div className="fixed bottom-0 left-0 right-0 z-40 bg-slate-100/95 backdrop-blur-md border-t border-slate-300 shadow-[0_-10px_30px_rgba(15,23,42,0.12)] py-4 px-6 sm:px-12 lg:px-16 transition-all duration-300">
             <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div>
-                <p className="text-xs text-slate-400">
-                  {t('selectedItems')} <span className="font-bold text-white text-sm">{totalItemsCount}</span>
-                </p>
-                <div className="flex items-baseline gap-1.5 mt-0.5">
-                  <span className="text-xs text-slate-300">{t('estimatedTotal')}</span>
-                  <span className="text-lg font-extrabold text-blue-400">
-                    {formatPriceNumber(totalPriceUSD)}
+              
+              {/* DATOS DE RESUMEN */}
+              <div className="flex items-center gap-6 text-left">
+                <div>
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 block">
+                    {t('selectedItems')}
                   </span>
-                  <span className="text-xs font-bold text-blue-300">
-                    {locale === 'es' ? 'CLP' : 'USD'}
+                  <span className="text-sm font-bold text-slate-800">
+                    {totalItemsCount} {locale === 'es' ? 'productos' : 'products'}
                   </span>
                 </div>
+
+                <div className="h-8 w-[1px] bg-slate-300" />
+
+                <div>
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 block">
+                    {t('estimatedTotal')}
+                  </span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">
+                      {formatPriceNumber(totalPriceUSD)}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-[#E45B25]">
+                      {locale === 'es' ? 'CLP' : 'USD'}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
+
+              {/* BOTONES DE ACCIÓN */}
+              <div className="flex items-center gap-3 w-full sm:w-auto">
                 <button
                   onClick={handleDownloadPDF}
-                  className="rounded-xl bg-slate-800 border border-slate-700 px-5 py-2.5 text-xs font-semibold text-white hover:bg-slate-700 transition-all flex items-center gap-2"
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm border border-slate-300 transition-colors shadow-sm cursor-pointer"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                   {t('downloadPdf')}
                 </button>
+
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white shadow-md hover:bg-blue-500 transition-all"
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#E45B25] hover:bg-[#d04e1c] text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
                 >
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
                   {t('submitQuote')}
                 </button>
               </div>
+
             </div>
           </div>
         )}
 
-        {/* Modal de Envío con Indicaciones Inferiores */}
+        {/* Modal de Envío de Cotización */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-            <div className="w-full max-w-lg rounded-3xl bg-white p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+            <div className="w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-100">
               <div className="flex justify-between items-center pb-4 border-b border-slate-100">
-                <h3 className="text-xl font-bold text-slate-900">
+                <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                   {t('modalTitle')}
                 </h3>
                 <button 
                   onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-600 font-bold text-xl"
+                  className="text-slate-400 hover:text-slate-600 font-bold text-2xl cursor-pointer"
                 >
                   &times;
                 </button>
@@ -558,7 +566,7 @@ export default function CatalogClient({ products, locale }: { products: Product[
 
               <form onSubmit={handleSubmitQuote} className="mt-6 space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
                     {t('vesselName')} *
                   </label>
                   <input 
@@ -566,15 +574,15 @@ export default function CatalogClient({ products, locale }: { products: Product[
                     required
                     value={vesselName}
                     onChange={e => setVesselName(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-blue-600"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 focus:border-[#E45B25] focus:ring-1 focus:ring-[#E45B25] focus:outline-none transition-all"
                   />
-                  <span className="block text-xs text-slate-400 mt-1 ml-1">
-                    {locale === 'es' ? 'Ej. M/V North Star' : 'E.g. M/V North Star'}
+                  <span className="text-xs text-slate-500 font-medium mt-1 block">
+                    {locale === 'es' ? 'Ej. M/V North Star / Remolcador SAAM' : 'E.g. M/V North Star'}
                   </span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
                     {t('port')} *
                   </label>
                   <input 
@@ -582,15 +590,15 @@ export default function CatalogClient({ products, locale }: { products: Product[
                     required
                     value={port}
                     onChange={e => setPort(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-blue-600"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 focus:border-[#E45B25] focus:ring-1 focus:ring-[#E45B25] focus:outline-none transition-all"
                   />
-                  <span className="block text-xs text-slate-400 mt-1 ml-1">
-                    {locale === 'es' ? 'Ej. Puerto de Antofagasta' : 'E.g. Port of Antofagasta'}
+                  <span className="text-xs text-slate-500 font-medium mt-1 block">
+                    {locale === 'es' ? 'Ej. Puerto de Antofagasta / Mejillones' : 'E.g. Port of Antofagasta'}
                   </span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
                     {t('contactEmail')} *
                   </label>
                   <input 
@@ -598,47 +606,47 @@ export default function CatalogClient({ products, locale }: { products: Product[
                     required
                     value={contactEmail}
                     onChange={e => setContactEmail(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-blue-600"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 focus:border-[#E45B25] focus:ring-1 focus:ring-[#E45B25] focus:outline-none transition-all"
                   />
-                  <span className="block text-xs text-slate-400 mt-1 ml-1">
+                  <span className="text-xs text-slate-500 font-medium mt-1 block">
                     agent@shipping.com
                   </span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
                     {t('notes')}
                   </label>
                   <textarea 
                     rows={2}
                     value={notes}
                     onChange={e => setNotes(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-blue-600"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 focus:border-[#E45B25] focus:ring-1 focus:ring-[#E45B25] focus:outline-none transition-all resize-none"
                   />
-                  <span className="block text-xs text-slate-400 mt-1 ml-1">
+                  <span className="text-xs text-slate-500 font-medium mt-1 block">
                     {t('notesPlaceholder')}
                   </span>
                 </div>
 
                 <div className="rounded-xl bg-slate-50 p-4 border border-slate-200">
-                  <p className="text-xs font-semibold text-slate-500 mb-1">
+                  <p className="text-xs font-semibold text-slate-500 mb-0.5 font-mono">
                     {t('autoDestination')}
                   </p>
-                  <p className="text-sm font-bold text-blue-600">commercial@northmaritimeservices.com</p>
+                  <p className="text-sm font-bold text-slate-900">commercial@northmaritimeservices.com</p>
                 </div>
 
-                <div className="mt-6 flex space-x-3">
+                <div className="mt-6 flex space-x-3 pt-2">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 rounded-xl border border-slate-300 py-3 font-semibold text-slate-700 hover:bg-slate-50"
+                    className="flex-1 rounded-xl border border-slate-200 py-3 text-xs sm:text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                   >
                     {t('cancel')}
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="flex-1 rounded-xl bg-blue-600 py-3 font-semibold text-white shadow-md hover:bg-blue-500 disabled:opacity-50"
+                    className="flex-1 rounded-xl bg-[#E45B25] hover:bg-[#d04e1c] py-3 text-xs sm:text-sm font-bold text-white shadow-md transition-colors disabled:opacity-50 cursor-pointer"
                   >
                     {submitting ? t('submitting') : t('send')}
                   </button>
