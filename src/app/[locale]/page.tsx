@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import HeroSection from '@/components/HeroSection';
+import SupplyJourneySection from '@/components/SupplyJourneySection';
 import ServicesCorporate from '@/components/ServicesCorporate';
 
 export default async function HomePage({
@@ -14,14 +15,17 @@ export default async function HomePage({
   const tCompany = await getTranslations({ locale, namespace: 'Company' });
 
   return (
-    <main className="min-h-screen bg-white text-slate-900">
+    <main className="min-h-screen bg-white text-slate-900 selection:bg-slate-800 selection:text-white">
       {/* 1. HERO RECREADO EXACTO AL BOCETO */}
       <HeroSection locale={locale} />
 
-      {/* 2. TARJETAS CORPORATIVAS CON IMÁGENES & GSAP */}
+      {/* 2. SPLIT-SCREEN PINNED: LA TRAVESÍA DEL SUMINISTRO NMS */}
+      <SupplyJourneySection locale={locale} />
+
+      {/* 3. TARJETAS CORPORATIVAS CON IMÁGENES & GSAP */}
       <ServicesCorporate locale={locale} />
 
-      {/* 3. ESTÁNDAR DE OPERACIÓN */}
+      {/* 4. ESTÁNDAR DE OPERACIÓN */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-b border-slate-200">
         <div className="mx-auto max-w-7xl">
           <div className="text-center max-w-3xl mx-auto">
@@ -76,7 +80,7 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* 4. IDENTIDAD CORPORATIVA */}
+      {/* 5. IDENTIDAD CORPORATIVA */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-900 text-white">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
